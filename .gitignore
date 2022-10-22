@@ -2,6 +2,8 @@
 /config.json
 .vscode/
 .node-version
+/subscription.sqlite
+/readingList.sqlite
 
 # Logs
 logs

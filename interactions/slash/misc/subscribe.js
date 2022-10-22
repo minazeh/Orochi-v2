@@ -82,6 +82,11 @@ module.exports = {
 
         if (!interaction.isChatInputCommand()) return;
 
+        if (!interaction.member.roles.cache.some(r => r.name === "Moderator")){
+            await interaction.reply('You are not allowed to use this command :poop:');
+            return;
+        } 
+
 		if (interaction.commandName === 'subscribe') {
 
 			if (interaction.options.getSubcommand() === 'add') {

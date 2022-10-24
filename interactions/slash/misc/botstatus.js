@@ -22,7 +22,7 @@ module.exports = {
 		),
 
 	async execute(interaction) {
-		
+
 		let guild = interaction.guild;
 
         const guildMem = await guild.members.fetch('1027480076717142076');

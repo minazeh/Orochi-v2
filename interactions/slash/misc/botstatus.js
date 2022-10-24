@@ -23,12 +23,9 @@ module.exports = {
 
 	async execute(interaction) {
 
-		let guild = interaction.guild;
-
-        const guildMem = await guild.members.fetch('1027480076717142076');
 
 		// Replies to the interaction!
-		await interaction.reply({ content: 'The bot is ' + guildMem.presence.status, ephemeral: true });
+		await interaction.reply({ content: 'The bot is online.', ephemeral: true });
 		
 	}
 

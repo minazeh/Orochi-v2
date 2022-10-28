@@ -62,33 +62,90 @@ module.exports = {
 				.setColor('#5D1ABC');
 				
 				if( embedArray[9].includes('Anti') ){
+
 					client.channels.cache.get('1031579459368792084').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&1031742694634029077> <@&1031637263689457766>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1005670231487815700').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525082855063592>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Arcane') ){
 					client.channels.cache.get('1031579568458432584').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&1031742694634029077> <@&1031637367536234547>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035571630535086096').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525412007264318>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Arch') ){
 					client.channels.cache.get('1031579590990254090').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637397592612864>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035572016423649280').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525493439668334>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Breaking') ){
 					client.channels.cache.get('1031579635814776882').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637564165214240>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035572232249933844').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525577250246687>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Armor') && !embedArray[9].includes('Breaking') ){
 					client.channels.cache.get('1031579612641251442').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637510712991806>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035572145734025307').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525529653289030>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Blasphemy') ){
 					client.channels.cache.get('1031579654290690158').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637589112926208>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035572593153024000').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525631709106196>',  embeds: [snapperist] });
+					
 				} else if( embedArray[9].includes('Divine') ){
 					client.channels.cache.get('1031579677413875852').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637701738364959>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035572711461761024').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525708263530547>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Insight') ){
 					client.channels.cache.get('1031579697043210320').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637723854942268>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035572844882579486').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525761933836359>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Magic') ){
 					client.channels.cache.get('1031579716903243936').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637752804036629>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035572926352740433').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525804623483002>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Morale') ){
 					client.channels.cache.get('1031579735530160168').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031734900665110639>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035572977833623602').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525854380503040>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Blade') ){
 					client.channels.cache.get('1031579766492495964').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031734960614293594>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035573072591343676').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525914103197788>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Sharp') && !embedArray[9].includes('Blade') ){
 					client.channels.cache.get('1031579784490262608').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031734931858133012>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035573122608418857').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525946038628463>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Tenacity') ){
 					client.channels.cache.get('1031579804035711067').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031734987898245141>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035573185686552576').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525989646803074>',  embeds: [snapperist] });
+
 				} else if( embedArray[9].includes('Zeal') ){
 					client.channels.cache.get('1031580712056410132').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031735038875795466>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035573274068926515').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993526031845691452>',  embeds: [snapperist] });
+					
 				}
 				
 			} else if (index == 8 ){
@@ -106,7 +163,38 @@ module.exports = {
 				.addFields({name: 'Expiry', value: embedArray[6] })
 				.setColor('#5D1ABC');
 
-				client.channels.cache.get('1031580817593475082').send({content: embedTitle + ' is on market.\n<@&1031742865107337377>',  embeds: [snapperist] });
+				if( embedTitle.indexOf(']') !== -1 || embedTitle.indexOf('+') !== -1 ){ //check if item has slot or not
+
+					client.channels.cache.get('1035578856955973713').send({content: embedTitle + ' is on market.\n<@&1031742694634029077>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('1035578334362488903').send({content: embedTitle + ' is on market.\n<@&993538058978869368>',  embeds: [snapperist] });
+					
+
+				} else if( embedTitle.indexOf(' Card') !== -1  ){ //check if item is a card
+
+					client.channels.cache.get('1035590385591930971').send({content: embedTitle + ' is on market.\n<@&1031742694634029077> <@&1035590714064642069>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('993540758139322479').send({content: embedTitle + ' is on market.\n<@&993568936085958808>',  embeds: [snapperist] });	
+
+				} else if( embedTitle.indexOf('Blueprint') !== -1 ){ //check if item is a card
+
+					client.channels.cache.get('1035590427207811164').send({content: embedTitle + ' is on market.\n<@&1031742694634029077> <@&1035590882407223347>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('993540758139322479').send({content: embedTitle + ' is on market.\n<@&993568936085958808>',  embeds: [snapperist] });	
+
+				} else {
+
+					client.channels.cache.get('1031580817593475082').send({content: embedTitle + ' is on market.\n<@&993538058978869368> <@&1031742865107337377>',  embeds: [snapperist] });
+
+					//Paranoia
+					client.channels.cache.get('993540758139322479').send({content: embedTitle + ' is on market.\n<@&993568936085958808>',  embeds: [snapperist] });
+
+				}
+
+				
 				
 			}
 			

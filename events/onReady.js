@@ -57,26 +57,36 @@ module.exports = {
 
             try {
 
-                const channelx = client.channels.cache.get( '1031580817593475082' );
-            
-                channelx.messages.fetch({ limit: 100 }).then(messages => {
+                let rareItemsMOF = [ 
+                    '1031580817593475082', 
+                    '1035590385591930971', 
+                    '1035590427207811164', 
+                    '1035578856955973713', 
+                ];
+
+                rareItemsMOF.forEach(channel => {
                     
-                    messages.forEach(msg => {
+                    const rareItemChannels = client.channels.cache.get( channel );
+            
+                    rareItemChannels.messages.fetch({ limit: 100 }).then(messages => {
                         
-                        msg.embeds.forEach( embed => {
-                            try{
-                                timestamp = embed.fields[2].value.split(':');
-                                if(timestamp[1] < (Date.now() / 1000)){
-                                    msg.delete();
-                                }
-                            } catch {
-                                console.log('Error deleting');
-                            }
+                        messages.forEach(msg => {
                             
-                        })
+                            msg.embeds.forEach( embed => {
+                                try{
+                                    timestamp = embed.fields[2].value.split(':');
+                                    if(timestamp[1] < (Date.now() / 1000)){
+                                        msg.delete();
+                                    }
+                                } catch {
+                                    console.log('Error deleting');
+                                }
+                                
+                            })
+                            
+                        });
                         
                     });
-                    
                 });
                 
                 let mofChannels = [ 
@@ -97,6 +107,119 @@ module.exports = {
                 ];
 
                 mofChannels.forEach(channel => {
+                    
+                    //loop through all Enchant Channels for MOF
+                    const channelz = client.channels.cache.get(channel);
+                    
+                    channelz.messages.fetch({ limit: 100 }).then(messages => {
+                        
+                        messages.forEach(msg => {
+                            
+                            msg.embeds.forEach( embed => {
+                                try{
+                                    timestamp = embed.fields[3].value.split(':');
+                                    if(timestamp[1] < (Date.now() / 1000)){
+                                        console.log(embed.title);
+                                        msg.delete();
+                                    }
+                                } catch {
+                                    try{
+                                        timestamp = embed.fields[2].value.split(':');
+                                        if(timestamp[1] < (Date.now() / 1000)){
+                                            msg.delete();
+                                        }
+                                    } catch {
+                                        console.log('Error deleting');
+                                    }
+                                }
+                                
+                            })
+                            
+                        });
+                        
+                    });
+                });
+
+            } catch (error) {
+
+                console.log(error);
+                
+            }
+
+            
+
+        },{
+            timezone: 'Asia/Singapore'
+        });
+
+        const removePastSnapsParanoia = cron.schedule('*/1 * * * *', () => {
+
+            //loop through all Rare Items for MOF
+
+            try {
+
+                const channelx = client.channels.cache.get( '993540758139322479' );
+            
+                channelx.messages.fetch({ limit: 100 }).then(messages => {
+                    
+                    messages.forEach(msg => {
+                        
+                        msg.embeds.forEach( embed => {
+                            try{
+                                timestamp = embed.fields[2].value.split(':');
+                                if(timestamp[1] < (Date.now() / 1000)){
+                                    msg.delete();
+                                }
+                            } catch {
+                                console.log('Error deleting');
+                            }
+                            
+                        })
+                        
+                    });
+                    
+                });
+
+                const channelNoEnchant = client.channels.cache.get( '1035578334362488903' );
+            
+                channelNoEnchant.messages.fetch({ limit: 100 }).then(messages => {
+                    
+                    messages.forEach(msg => {
+                        
+                        msg.embeds.forEach( embed => {
+                            try{
+                                timestamp = embed.fields[2].value.split(':');
+                                if(timestamp[1] < (Date.now() / 1000)){
+                                    msg.delete();
+                                }
+                            } catch {
+                                console.log('Error deleting');
+                            }
+                            
+                        })
+                        
+                    });
+                    
+                });
+                
+                let paranoiaChannels = [ 
+                    '1005670231487815700', 
+                    '1035571630535086096', 
+                    '1035572016423649280', 
+                    '1035572145734025307', 
+                    '1035572232249933844', 
+                    '1035572593153024000', 
+                    '1035572711461761024', 
+                    '1035572844882579486', 
+                    '1035572926352740433', 
+                    '1035572977833623602', 
+                    '1035573072591343676', 
+                    '1035573122608418857', 
+                    '1035573185686552576', 
+                    '1035573274068926515', 
+                ];
+
+                paranoiaChannels.forEach(channel => {
                     
                     //loop through all Enchant Channels for MOF
                     const channelz = client.channels.cache.get(channel);
@@ -222,6 +345,7 @@ module.exports = {
         
         // When you want to start it, use:
         removePastSnaps.start();
+        removePastSnapsParanoia.start();
         checkExpiredSubscriptions.start();
 
 

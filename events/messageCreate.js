@@ -9,6 +9,7 @@
 
 const { Collection, ChannelType, Client, EmbedBuilder } = require("discord.js");
 const { prefix, owner } = require("../config.json");
+const fs = require('fs');
 
 // Prefix regex, we will use to match in mention prefix.
 
@@ -36,166 +37,274 @@ module.exports = {
 		
 		if( message.channel.id == '993205836048511068'){
 
-			let index = 0;
-			let embedArray = message.content.split("\n");
-			embedArray.forEach(elem => {
-				index++;
-			});
+			try {
+				fs.readFile('./guilds.json', 'utf8', (err, data) => {
 
-			if( index == 13 ){
-				//enchanted items
-				let embedTitle = embedArray[0];
+					if (err) {
 
-				if( embedTitle.indexOf(':broken:') !== -1 ){
-					embedTitle = embedTitle.replace(':broken:', '<:broken:1031755813917835284>');
-				}
+						console.log(`Error reading file from disk: ${err}`)
 
-				const embedThumb = embedArray[12].split('URL=')
-				const splitedEnchant = embedArray[9].split(':');
-				const snapperist = new EmbedBuilder()
-				.setTitle(embedTitle)
-				.setThumbnail(embedThumb[1])
-				.addFields({name: 'Server', value: embedArray[2] })
-				.addFields({name: 'Price', value: embedArray[4] })
-				.addFields({name: 'Enchants', value: embedArray[6] + '\n' + embedArray[7] + '\n' + embedArray[8] + '\n **' + embedArray[9] + '**' })
-				.addFields({name: 'Expiry', value: embedArray[11] })
-				.setColor('#5D1ABC');
-				
-				if( embedArray[9].includes('Anti') ){
+					} else {
 
-					client.channels.cache.get('1031579459368792084').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&1031742694634029077> <@&1031637263689457766>',  embeds: [snapperist] });
+						
+						const romGuilds = JSON.parse(data);
 
-					//Paranoia
-					client.channels.cache.get('1005670231487815700').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525082855063592>',  embeds: [snapperist] });
+						let index = 0;
+						let embedArray = message.content.split("\n");
+						embedArray.forEach(elem => {
+							index++;
+						});
 
-				} else if( embedArray[9].includes('Arcane') ){
-					client.channels.cache.get('1031579568458432584').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&1031742694634029077> <@&1031637367536234547>',  embeds: [snapperist] });
+						if( index == 13 ){ // Enchanted Items => Index == 13
 
-					//Paranoia
-					client.channels.cache.get('1035571630535086096').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525412007264318>',  embeds: [snapperist] });
+							let embedTitle = embedArray[0];
 
-				} else if( embedArray[9].includes('Arch') ){
-					client.channels.cache.get('1031579590990254090').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637397592612864>',  embeds: [snapperist] });
+							if( embedTitle.indexOf(':broken:') !== -1 ){
+								embedTitle = embedTitle.replace(':broken:', '<:broken:1031755813917835284>');
+							}
+							
+							const server = embedArray[2];
 
-					//Paranoia
-					client.channels.cache.get('1035572016423649280').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525493439668334>',  embeds: [snapperist] });
+							const embedThumb = embedArray[12].split('URL=')
+							const splitedEnchant = embedArray[9].split(':');
+							const snapperist = new EmbedBuilder()
+							.setTitle(embedTitle)
+							.setThumbnail(embedThumb[1])
+							.addFields({name: 'Server', value: embedArray[2] })
+							.addFields({name: 'Price', value: embedArray[4] })
+							.addFields({name: 'Enchants', value: embedArray[6] + '\n' + embedArray[7] + '\n' + embedArray[8] + '\n **' + embedArray[9] + '**' })
+							.addFields({name: 'Expiry', value: embedArray[11] })
+							.setColor('#5D1ABC');
 
-				} else if( embedArray[9].includes('Breaking') ){
-					client.channels.cache.get('1031579635814776882').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637564165214240>',  embeds: [snapperist] });
 
-					//Paranoia
-					client.channels.cache.get('1035572232249933844').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525577250246687>',  embeds: [snapperist] });
+							let romServer;
 
-				} else if( embedArray[9].includes('Armor') && !embedArray[9].includes('Breaking') ){
-					client.channels.cache.get('1031579612641251442').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637510712991806>',  embeds: [snapperist] });
+							// Select which server is the item from
+							if( server === 'SEA Eternal Love' ){
+								romServer = romGuilds.el;
+							} else if( server === 'SEA Midnight Party' ){
+								romServer = romGuilds.mp;
+							} else if( server === 'SEA Memory of Faith' ){
+								romServer = romGuilds.mof;
+							}
 
-					//Paranoia
-					client.channels.cache.get('1035572145734025307').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525529653289030>',  embeds: [snapperist] });
+							// Fetch guilds from those server
+							romServer.forEach( guilds => {
 
-				} else if( embedArray[9].includes('Blasphemy') ){
-					client.channels.cache.get('1031579654290690158').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637589112926208>',  embeds: [snapperist] });
+								let channelID;
+								let roleID;
+								let snapAllID;
+								let ping = false;
 
-					//Paranoia
-					client.channels.cache.get('1035572593153024000').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525631709106196>',  embeds: [snapperist] });
-					
-				} else if( embedArray[9].includes('Divine') ){
-					client.channels.cache.get('1031579677413875852').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637701738364959>',  embeds: [snapperist] });
+								guilds.channels.forEach( channels => {
 
-					//Paranoia
-					client.channels.cache.get('1035572711461761024').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525708263530547>',  embeds: [snapperist] });
+									if( embedArray[9].includes('Anti') ){
 
-				} else if( embedArray[9].includes('Insight') ){
-					client.channels.cache.get('1031579697043210320').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637723854942268>',  embeds: [snapperist] });
+										if( channels.name === 'Anti-Mage' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-					//Paranoia
-					client.channels.cache.get('1035572844882579486').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525761933836359>',  embeds: [snapperist] });
+									} else if( embedArray[9].includes('Arcane') ){
+										
+										if( channels.name === 'Arcane' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-				} else if( embedArray[9].includes('Magic') ){
-					client.channels.cache.get('1031579716903243936').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031637752804036629>',  embeds: [snapperist] });
+									} else if( embedArray[9].includes('Arch') ){
 
-					//Paranoia
-					client.channels.cache.get('1035572926352740433').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525804623483002>',  embeds: [snapperist] });
+										if( channels.name === 'Arch' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-				} else if( embedArray[9].includes('Morale') ){
-					client.channels.cache.get('1031579735530160168').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031734900665110639>',  embeds: [snapperist] });
+									} else if( embedArray[9].includes('Breaking') ){
+										
+										if( channels.name === 'Armor Breaking' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-					//Paranoia
-					client.channels.cache.get('1035572977833623602').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525854380503040>',  embeds: [snapperist] });
+									} else if( embedArray[9].includes('Armor') && !embedArray[9].includes('Breaking') ){
+										
+										if( channels.name === 'Armor' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-				} else if( embedArray[9].includes('Blade') ){
-					client.channels.cache.get('1031579766492495964').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031734960614293594>',  embeds: [snapperist] });
+									} else if( embedArray[9].includes('Blasphemy') ){
+										
+										if( channels.name === 'Blasphemy' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-					//Paranoia
-					client.channels.cache.get('1035573072591343676').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525914103197788>',  embeds: [snapperist] });
+									} else if( embedArray[9].includes('Divine') ){
 
-				} else if( embedArray[9].includes('Sharp') && !embedArray[9].includes('Blade') ){
-					client.channels.cache.get('1031579784490262608').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031734931858133012>',  embeds: [snapperist] });
+										if( channels.name === 'Divine Blessing' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
+										
+									} else if( embedArray[9].includes('Insight') ){
 
-					//Paranoia
-					client.channels.cache.get('1035573122608418857').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525946038628463>',  embeds: [snapperist] });
+										if( channels.name === 'Insight' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
+										
+									} else if( embedArray[9].includes('Magic') ){
 
-				} else if( embedArray[9].includes('Tenacity') ){
-					client.channels.cache.get('1031579804035711067').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031734987898245141>',  embeds: [snapperist] });
+										if( channels.name === 'Magic' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
+										
+									} else if( embedArray[9].includes('Morale') ){
+										
+										if( channels.name === 'Morale' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-					//Paranoia
-					client.channels.cache.get('1035573185686552576').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993525989646803074>',  embeds: [snapperist] });
+									} else if( embedArray[9].includes('Blade') ){
+										
+										if( channels.name === 'Sharp Blade' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-				} else if( embedArray[9].includes('Zeal') ){
-					client.channels.cache.get('1031580712056410132').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**'  + '\n<@&1031742694634029077> <@&1031735038875795466>',  embeds: [snapperist] });
+									} else if( embedArray[9].includes('Sharp') && !embedArray[9].includes('Blade') ){
 
-					//Paranoia
-					client.channels.cache.get('1035573274068926515').send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&993538058978869368> <@&993526031845691452>',  embeds: [snapperist] });
-					
-				}
-				
-			} else if (index == 8 ){
-				// rare items
-				let embedTitle = embedArray[0];
-				if( embedTitle.indexOf(':broken:') !== -1 ){
-					embedTitle = embedTitle.replace(':broken:', '<:broken:1031755813917835284>');
-				}
-				const embedThumb = embedArray[7].split('URL=')
-				const snapperist = new EmbedBuilder()
-				.setTitle(embedTitle)
-				.setThumbnail(embedThumb[1])
-				.addFields({name: 'Server', value: embedArray[2] })
-				.addFields({name: 'Price', value: embedArray[4] })
-				.addFields({name: 'Expiry', value: embedArray[6] })
-				.setColor('#5D1ABC');
+										if( channels.name === 'Sharp' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
+									
+									} else if( embedArray[9].includes('Tenacity') ){
 
-				if( embedTitle.indexOf(']') !== -1 || embedTitle.indexOf('+') !== -1 ){ //check if item has slot or not
+										if( channels.name === 'Tenacity' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
+										
+									} else if( embedArray[9].includes('Zeal') ){
 
-					client.channels.cache.get('1035578856955973713').send({content: embedTitle + ' is on market.\n<@&1031742694634029077>',  embeds: [snapperist] });
+										if( channels.name === 'Zeal' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
+										
+									}
 
-					//Paranoia
-					client.channels.cache.get('1035578334362488903').send({content: embedTitle + ' is on market.\n<@&993538058978869368>',  embeds: [snapperist] });
-					
+								});
 
-				} else if( embedTitle.indexOf(' Card') !== -1  ){ //check if item is a card
+								if (embedArray[9].includes('3') || embedArray[9].includes('4')){
+									client.channels.cache.get( channelID ).send({content: embedTitle + ' | ' + splitedEnchant[0] + '**' + '\n<@&'+ roleID +'> <@&'+ snapAllID +'>',  embeds: [snapperist] });
+								} else {
+									client.channels.cache.get( channelID ).send({content: embedTitle + ' | ' + splitedEnchant[0] + '**',  embeds: [snapperist] });
+								}
+								
+							});
 
-					client.channels.cache.get('1035590385591930971').send({content: embedTitle + ' is on market.\n<@&1031742694634029077> <@&1035590714064642069>',  embeds: [snapperist] });
+						} else if (index == 8 ){
+							// rare items
+							let embedTitle = embedArray[0];
+							if( embedTitle.indexOf(':broken:') !== -1 ){
+								embedTitle = embedTitle.replace(':broken:', '<:broken:1031755813917835284>');
+							}
 
-					//Paranoia
-					client.channels.cache.get('993540758139322479').send({content: embedTitle + ' is on market.\n<@&993568936085958808>',  embeds: [snapperist] });	
+							const server = embedArray[2];
+							const embedThumb = embedArray[7].split('URL=')
+							const snapperist = new EmbedBuilder()
+							.setTitle(embedTitle)
+							.setThumbnail(embedThumb[1])
+							.addFields({name: 'Server', value: embedArray[2] })
+							.addFields({name: 'Price', value: embedArray[4] })
+							.addFields({name: 'Expiry', value: embedArray[6] })
+							.setColor('#5D1ABC');
 
-				} else if( embedTitle.indexOf('Blueprint') !== -1 ){ //check if item is a card
+							let romServer;
 
-					client.channels.cache.get('1035590427207811164').send({content: embedTitle + ' is on market.\n<@&1031742694634029077> <@&1035590882407223347>',  embeds: [snapperist] });
+							// Select which server is the item from
+							if( server === 'SEA Eternal Love' ){
+								romServer = romGuilds.el;
+							} else if( server === 'SEA Midnight Party' ){
+								romServer = romGuilds.mp;
+							} else if( server === 'SEA Memory of Faith' ){
+								romServer = romGuilds.mof;
+							}
 
-					//Paranoia
-					client.channels.cache.get('993540758139322479').send({content: embedTitle + ' is on market.\n<@&993568936085958808>',  embeds: [snapperist] });	
+							romServer.forEach( guilds => {
 
-				} else {
+								let channelID;
+								let roleID;
+								let snapAllID;
 
-					client.channels.cache.get('1031580817593475082').send({content: embedTitle + ' is on market.\n<@&993538058978869368> <@&1031742865107337377>',  embeds: [snapperist] });
+								guilds.channels.forEach( channels => {
+									
+									if( embedTitle.indexOf(']') !== -1 || embedTitle.indexOf('+') !== -1 ){ 
+										//check if item has slot or not
+										if( channels.name === 'No Enchants' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
+									
+									} else if( embedTitle.indexOf('Card') !== -1  ){ 
+										//check if item is a card	
+										if( channels.name === 'Cards' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-					//Paranoia
-					client.channels.cache.get('993540758139322479').send({content: embedTitle + ' is on market.\n<@&993568936085958808>',  embeds: [snapperist] });
+									} else if( embedTitle.indexOf('Blueprint') !== -1 ){ 
+										//check if item is a blueprint
+										if( channels.name === 'Blueprints' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-				}
+									} else {
+										//if nothing checks out, its a rare item
+										if( channels.name === 'Rare Items' ){
+											channelID = channels.channel_id;
+											roleID = channels.role_id;
+											snapAllID = channels.snapall_id;
+										}
 
-				
-				
+									}
+
+								});
+
+								client.channels.cache.get(channelID).send({content: embedTitle + ' is on market.\n<@&'+ roleID +'> <@&'+ snapAllID +'>',  embeds: [snapperist] });
+
+							});
+							
+						}
+
+					}
+
+				});
+			} catch (error) {
+				console.log(error);
 			}
 			
 		}

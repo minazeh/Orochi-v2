@@ -16,6 +16,7 @@ module.exports = {
 	 * @param {import('../typings').Client} client Main Application Client.
 	 */
 	execute(client) {
+        
 
         client.user.setPresence({ activities: [{ name: 'In the middle of developing something cool.'}] });
 
@@ -24,6 +25,7 @@ module.exports = {
 		const Sequelize = require('sequelize');
         const moment = require('moment');
         const { EmbedBuilder } = require("discord.js");
+        const fs = require('fs');
 
         const sequelize = new Sequelize('database', 'user', 'password', {
             host: 'localhost',
@@ -57,87 +59,249 @@ module.exports = {
 
             try {
 
-                let rareItemsMOF = [ 
-                    '1031580817593475082', 
-                    '1035590385591930971', 
-                    '1035590427207811164', 
-                    '1035578856955973713', 
-                ];
+                fs.readFile('./guilds.json', 'utf8', (err, data) => {
 
-                rareItemsMOF.forEach(channel => {
-                    
-                    const rareItemChannels = client.channels.cache.get( channel );
-            
-                    rareItemChannels.messages.fetch({ limit: 100 }).then(messages => {
-                        
-                        messages.forEach(msg => {
-                            
-                            msg.embeds.forEach( embed => {
-                                try{
-                                    timestamp = embed.fields[2].value.split(':');
-                                    if(timestamp[1] < (Date.now() / 1000)){
-                                        msg.delete();
-                                    }
-                                } catch {
-                                    console.log('Error deleting');
-                                }
-                                
-                            })
-                            
-                        });
-                        
-                    });
-                });
-                
-                let mofChannels = [ 
-                    '1031579459368792084', 
-                    '1031579568458432584', 
-                    '1031579590990254090', 
-                    '1031579612641251442', 
-                    '1031579635814776882',
-                    '1031579654290690158',
-                    '1031579677413875852',
-                    '1031579697043210320',
-                    '1031579716903243936',
-                    '1031579735530160168',
-                    '1031579766492495964',
-                    '1031579784490262608',
-                    '1031579804035711067',
-                    '1031580712056410132',
-                ];
+					if (err) {
 
-                mofChannels.forEach(channel => {
-                    
-                    //loop through all Enchant Channels for MOF
-                    const channelz = client.channels.cache.get(channel);
-                    
-                    channelz.messages.fetch({ limit: 100 }).then(messages => {
-                        
-                        messages.forEach(msg => {
-                            
-                            msg.embeds.forEach( embed => {
-                                try{
-                                    timestamp = embed.fields[3].value.split(':');
-                                    if(timestamp[1] < (Date.now() / 1000)){
-                                        console.log(embed.title);
-                                        msg.delete();
-                                    }
-                                } catch {
-                                    try{
-                                        timestamp = embed.fields[2].value.split(':');
-                                        if(timestamp[1] < (Date.now() / 1000)){
-                                            msg.delete();
-                                        }
-                                    } catch {
-                                        console.log('Error deleting');
-                                    }
+						console.log(`Error reading file from disk: ${err}`)
+
+					} else {
+
+                        const romGuilds = JSON.parse(data);
+
+                        romGuilds.el.forEach( guilds => {
+
+                            console.log('Deleting items from ' + guilds.guild_name );
+
+                            guilds.channels.forEach( channels => {
+
+                                if( channels.name === 'Rare Items' || 
+                                    channels.name === 'Cards' || 
+                                    channels.name === 'Blueprints'  || 
+                                    channels.name === 'No Enchants'){
+
+                                    // loop through rare items, cards, blueprints, no enchants
+
+                                    const rareItemChannels = client.channels.cache.get( channels.channel_id );
+        
+                                    rareItemChannels.messages.fetch({ limit: 100 }).then(messages => {
+                                        
+                                        messages.forEach(msg => {
+                                            
+                                            msg.embeds.forEach( embed => {
+                                                try{
+                                                    timestamp = embed.fields[2].value.split(':');
+                                                    if(timestamp[1] < (Date.now() / 1000)){
+                                                        msg.delete();
+                                                        console.log('Deleting items from ' + channels.name );
+                                                    }
+                                                } catch {
+                                                    console.log('Error deleting');
+                                                }
+                                                
+                                            })
+                                            
+                                        });
+                                        
+                                    });
+
+                                } else {
+
+                                    //loop through all Enchant Channels
+                                    const enchantChannels = client.channels.cache.get( channels.channel_id );
+                                    
+                                    enchantChannels.messages.fetch({ limit: 100 }).then(messages => {
+                                        
+                                        messages.forEach(msg => {
+                                            
+                                            msg.embeds.forEach( embed => {
+                                                try{
+                                                    timestamp = embed.fields[3].value.split(':');
+                                                    if(timestamp[1] < (Date.now() / 1000)){
+                                                        console.log(embed.title);
+                                                        msg.delete();
+                                                        console.log('Deleting items from ' + channels.name );
+                                                    }
+                                                } catch {
+                                                    try{
+                                                        timestamp = embed.fields[2].value.split(':');
+                                                        if(timestamp[1] < (Date.now() / 1000)){
+                                                            msg.delete();
+                                                            console.log('Deleting items from ' + channels.name );
+                                                        }
+                                                    } catch {
+                                                        console.log('Error deleting');
+                                                    }
+                                                }
+                                                
+                                            })
+                                            
+                                        });
+                                        
+                                    });
+
                                 }
-                                
-                            })
-                            
+
+                            });
+
                         });
-                        
-                    });
+
+                        romGuilds.mp.forEach( guilds => {
+
+                            console.log('Deleting items from ' + guilds.guild_name );
+
+                            guilds.channels.forEach( channels => {
+
+                                if( channels.name === 'Rare Items' || 
+                                    channels.name === 'Cards' || 
+                                    channels.name === 'Blueprints'  || 
+                                    channels.name === 'No Enchants'){
+
+                                    // loop through rare items, cards, blueprints, no enchants
+
+                                    const rareItemChannels = client.channels.cache.get( channels.channel_id );
+        
+                                    rareItemChannels.messages.fetch({ limit: 100 }).then(messages => {
+                                        
+                                        messages.forEach(msg => {
+                                            
+                                            msg.embeds.forEach( embed => {
+                                                try{
+                                                    timestamp = embed.fields[2].value.split(':');
+                                                    if(timestamp[1] < (Date.now() / 1000)){
+                                                        msg.delete();
+                                                        console.log('Deleting items from ' + channels.name );
+                                                    }
+                                                } catch {
+                                                    console.log('Error deleting');
+                                                }
+                                                
+                                            })
+                                            
+                                        });
+                                        
+                                    });
+
+                                } else {
+
+                                    //loop through all Enchant Channels
+                                    const enchantChannels = client.channels.cache.get( channels.channel_id );
+                                    
+                                    enchantChannels.messages.fetch({ limit: 100 }).then(messages => {
+                                        
+                                        messages.forEach(msg => {
+                                            
+                                            msg.embeds.forEach( embed => {
+                                                try{
+                                                    timestamp = embed.fields[3].value.split(':');
+                                                    if(timestamp[1] < (Date.now() / 1000)){
+                                                        console.log(embed.title);
+                                                        msg.delete();
+                                                        console.log('Deleting items from ' + channels.name );
+                                                    }
+                                                } catch {
+                                                    try{
+                                                        timestamp = embed.fields[2].value.split(':');
+                                                        if(timestamp[1] < (Date.now() / 1000)){
+                                                            msg.delete();
+                                                            console.log('Deleting items from ' + channels.name );
+                                                        }
+                                                    } catch {
+                                                        console.log('Error deleting');
+                                                    }
+                                                }
+                                                
+                                            })
+                                            
+                                        });
+                                        
+                                    });
+
+                                }
+
+                            });
+
+                        });
+
+                        romGuilds.mof.forEach( guilds => {
+
+                            console.log('Deleting items from ' + guilds.guild_name );
+
+                            guilds.channels.forEach( channels => {
+
+                                if( channels.name === 'Rare Items' || 
+                                    channels.name === 'Cards' || 
+                                    channels.name === 'Blueprints'  || 
+                                    channels.name === 'No Enchants'){
+
+                                    // loop through rare items, cards, blueprints, no enchants
+
+                                    const rareItemChannels = client.channels.cache.get( channels.channel_id );
+        
+                                    rareItemChannels.messages.fetch({ limit: 100 }).then(messages => {
+                                        
+                                        messages.forEach(msg => {
+                                            
+                                            msg.embeds.forEach( embed => {
+                                                try{
+                                                    timestamp = embed.fields[2].value.split(':');
+                                                    if(timestamp[1] < (Date.now() / 1000)){
+                                                        msg.delete();
+                                                        console.log('Deleting items from ' + channels.name );
+                                                    }
+                                                } catch {
+                                                    console.log('Error deleting');
+                                                }
+                                                
+                                            })
+                                            
+                                        });
+                                        
+                                    });
+
+                                } else {
+
+                                    //loop through all Enchant Channels
+                                    const enchantChannels = client.channels.cache.get( channels.channel_id );
+                                    
+                                    enchantChannels.messages.fetch({ limit: 100 }).then(messages => {
+                                        
+                                        messages.forEach(msg => {
+                                            
+                                            msg.embeds.forEach( embed => {
+                                                try{
+                                                    timestamp = embed.fields[3].value.split(':');
+                                                    if(timestamp[1] < (Date.now() / 1000)){
+                                                        console.log(embed.title);
+                                                        msg.delete();
+                                                        console.log('Deleting items from ' + channels.name );
+                                                    }
+                                                } catch {
+                                                    try{
+                                                        timestamp = embed.fields[2].value.split(':');
+                                                        if(timestamp[1] < (Date.now() / 1000)){
+                                                            msg.delete();
+                                                            console.log('Deleting items from ' + channels.name );
+                                                        }
+                                                    } catch {
+                                                        console.log('Error deleting');
+                                                    }
+                                                }
+                                                
+                                            })
+                                            
+                                        });
+                                        
+                                    });
+
+                                }
+
+                            });
+
+                        });
+
+                    }
+
                 });
 
             } catch (error) {
@@ -146,125 +310,9 @@ module.exports = {
                 
             }
 
-            
-
         },{
             timezone: 'Asia/Singapore'
         });
-
-        const removePastSnapsParanoia = cron.schedule('*/1 * * * *', () => {
-
-            //loop through all Rare Items for MOF
-
-            try {
-
-                const channelx = client.channels.cache.get( '993540758139322479' );
-            
-                channelx.messages.fetch({ limit: 100 }).then(messages => {
-                    
-                    messages.forEach(msg => {
-                        
-                        msg.embeds.forEach( embed => {
-                            try{
-                                timestamp = embed.fields[2].value.split(':');
-                                if(timestamp[1] < (Date.now() / 1000)){
-                                    msg.delete();
-                                }
-                            } catch {
-                                console.log('Error deleting');
-                            }
-                            
-                        })
-                        
-                    });
-                    
-                });
-
-                const channelNoEnchant = client.channels.cache.get( '1035578334362488903' );
-            
-                channelNoEnchant.messages.fetch({ limit: 100 }).then(messages => {
-                    
-                    messages.forEach(msg => {
-                        
-                        msg.embeds.forEach( embed => {
-                            try{
-                                timestamp = embed.fields[2].value.split(':');
-                                if(timestamp[1] < (Date.now() / 1000)){
-                                    msg.delete();
-                                }
-                            } catch {
-                                console.log('Error deleting');
-                            }
-                            
-                        })
-                        
-                    });
-                    
-                });
-                
-                let paranoiaChannels = [ 
-                    '1005670231487815700', 
-                    '1035571630535086096', 
-                    '1035572016423649280', 
-                    '1035572145734025307', 
-                    '1035572232249933844', 
-                    '1035572593153024000', 
-                    '1035572711461761024', 
-                    '1035572844882579486', 
-                    '1035572926352740433', 
-                    '1035572977833623602', 
-                    '1035573072591343676', 
-                    '1035573122608418857', 
-                    '1035573185686552576', 
-                    '1035573274068926515', 
-                ];
-
-                paranoiaChannels.forEach(channel => {
-                    
-                    //loop through all Enchant Channels for MOF
-                    const channelz = client.channels.cache.get(channel);
-                    
-                    channelz.messages.fetch({ limit: 100 }).then(messages => {
-                        
-                        messages.forEach(msg => {
-                            
-                            msg.embeds.forEach( embed => {
-                                try{
-                                    timestamp = embed.fields[3].value.split(':');
-                                    if(timestamp[1] < (Date.now() / 1000)){
-                                        console.log(embed.title);
-                                        msg.delete();
-                                    }
-                                } catch {
-                                    try{
-                                        timestamp = embed.fields[2].value.split(':');
-                                        if(timestamp[1] < (Date.now() / 1000)){
-                                            msg.delete();
-                                        }
-                                    } catch {
-                                        console.log('Error deleting');
-                                    }
-                                }
-                                
-                            })
-                            
-                        });
-                        
-                    });
-                });
-
-            } catch (error) {
-
-                console.log(error);
-                
-            }
-
-            
-
-        },{
-            timezone: 'Asia/Singapore'
-        });
-
 
         const checkExpiredSubscriptions = cron.schedule('*/1 * * * *', () => {
 
@@ -345,7 +393,6 @@ module.exports = {
         
         // When you want to start it, use:
         removePastSnaps.start();
-        removePastSnapsParanoia.start();
         checkExpiredSubscriptions.start();
 
 
